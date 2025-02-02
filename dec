@@ -1,14 +1,21 @@
 pipeline {
     agent any
+    environment {
+        DEPLOY_NAME = "onlineshoping-#${currentBuild.number}"
+    }
     stages {
         stage('Welcome') {
             steps {
                 echo 'Welcome to Jenkins Declarative Pipeline'
+                script {
+                    // Set the displayName of the current build
+                    currentBuild.displayName = DEPLOY_NAME
+                }
             }
         }
         stage('Git Checkout') {
             steps {
-                git credentialsId: '948efbfa-ed49-47df-976c-2dbb050876a1', url: 'https://github.com/awsrakeshgowd/Maven_Jenkins.git'
+                git url: 'https://github.com/awsrakeshgowd/Maven_Jenkins.git'
             }
         }
         stage('Maven Build') {
