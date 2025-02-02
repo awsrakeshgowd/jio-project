@@ -1,0 +1,15 @@
+pipeline {
+    agent any
+    stages {
+        stage(Welcome) {
+            steps {
+                echo "Welcome to Jenkins Decatative"   
+            }
+        }
+            stage("Git Checkout") {
+            steps {
+                git credentialsId: '948efbfa-ed49-47df-976c-2dbb050876a1', url: 'https://github.com/awsrakeshgowd/jio-project.git'
+            }
+        }
+    }
+}
