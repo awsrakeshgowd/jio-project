@@ -1,10 +1,9 @@
-
 pipeline {
     agent any
     stages {
         stage('Welcome') {
             steps {
-                echo 'Welcome to Jenkins Declarative'
+                echo 'Welcome to Jenkins Declarative Pipeline'
             }
         }
         stage('Git Checkout') {
@@ -12,9 +11,19 @@ pipeline {
                 git credentialsId: '948efbfa-ed49-47df-976c-2dbb050876a1', url: 'https://github.com/awsrakeshgowd/Maven_Jenkins.git'
             }
         }
-        stage('Maven') {
+        stage('Maven Build') {
             steps {
                 bat 'mvn clean package'
+            }
+        }
+        stage('Deploy to Dev') {
+            steps {
+                sshagent(['tomcat-new']) {
+                    bat """
+                    ren C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\desclative-demo\\target\\my-app-1.0-SNAPSHOT.jar myweb.jar
+                    scp -o StrictHostKeyChecking=no C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\desclative-demo\\target\\myweb.jar Lenovo@192.168.56.1:/target/myweb.jar
+                    """
+                }
             }
         }
     }
